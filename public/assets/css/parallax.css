@@ -1,0 +1,58 @@
+/* General Reset and Styling */
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'montserrat-bold';
+    scroll-behavior: smooth;
+} */
+
+.parahero {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.parahero img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#landing h1 {
+    position: absolute;
+    z-index: 2;
+    top: 25%;
+    right: 0;
+    left: 200px;
+    font-size: 170px;
+    color: #fff;
+    text-align: center;
+}
+
+.last-img {
+    z-index: 1;
+}
+
+.mid-img {
+    z-index: 3;
+}
+
+.leaf-img {
+    z-index: 4;
+}
+
+.para-img {
+    z-index: 2;
+}
+
+#landing::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to top, #ffffff, transparent);
+    z-index: 10;
+}
