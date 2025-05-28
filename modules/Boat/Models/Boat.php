@@ -168,6 +168,7 @@ class Boat extends Bookable
         foreach ($items as $k => $item) {
             $large = FileHelper::url($item, 'full');
             $thumb = FileHelper::url($item, 'thumb');
+            if(!$thumb) continue;
             $list_item[] = [
                 'large' => $large,
                 'thumb' => $thumb
