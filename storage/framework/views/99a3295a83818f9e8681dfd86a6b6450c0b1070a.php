@@ -1,0 +1,2 @@
+<?php echo $__env->make("Layout::admin.app", \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php /**PATH /home/u301264826/domains/mestakara.com/public_html/mestakara/resources/views/admin/layouts/app.blade.php ENDPATH**/ ?>
