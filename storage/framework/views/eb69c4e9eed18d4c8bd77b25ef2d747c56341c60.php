@@ -1,0 +1,2 @@
+<?php echo $__env->make('Review::frontend.form', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+<?php /**PATH /home/u301264826/domains/mestakara.com/public_html/mestakara/themes/Mytravel/Hotel/Views/frontend/layouts/details/hotel-review.blade.php ENDPATH**/ ?>
