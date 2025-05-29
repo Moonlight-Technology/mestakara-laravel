@@ -45,22 +45,6 @@ class Booking extends BaseModel
         'draft','cancelled','unpaid'
     ];
 
-    protected $fillable = [
-        'code',          // Tiket.com's unique reservation ID
-        'object_id',     // Maps to hotel_code in Tiket.com
-        'first_name',    // Guest's first name
-        'last_name',     // Guest's last name
-        'start_date',    // Check-in date
-        'end_date',      // Check-out date
-        'status',        // Reservation status
-    ];
-
-    // Define relationship with bravo_room_bookings
-    public function roomBookings()
-    {
-        return $this->hasMany(\Modules\Hotel\Models\HotelRoomBooking::class, 'booking_id', 'id');
-    }
-
     public function getGatewayObjAttribute()
     {
         return $this->gateway ? get_payment_gateway_obj($this->gateway) : false;

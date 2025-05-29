@@ -35,12 +35,3 @@ Route::post('/admin/module/report/statistic/reloadChart', [StatisticController::
 Route::get('/admin/reports/get-hotels-by-location/{location_id}', [StatisticController::class, 'getHotelsByLocation'])
     ->name('admin.reports.getHotelsByLocation');
 
-Route::post('/tiketcom/reservations', [TiketComReservationController::class, 'handlePushReservation']);
-
-use App\Services\TiketComService;
-
-Route::get('/test-tiketcom-api', function () {
-    $service = new TiketComService();
-    $hotelDetails = $service->fetchHotelDetails(env('TIKETCOM_TEST_HOTEL_ID'));
-    dd($hotelDetails); // Dump and die to inspect the response
-});
