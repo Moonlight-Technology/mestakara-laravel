@@ -27,50 +27,50 @@ class BookingsExport implements FromCollection, WithEvents
      * Mengambil data untuk diekspor
      */
     public function collection()
-{
-    $sortedBookings = $this->bookings->sortBy(function($booking) {
-        return Carbon::parse($booking->updated_at);
-    });
+    {
+        $sortedBookings = $this->bookings->sortBy(function($booking) {
+            return Carbon::parse($booking->updated_at);
+        });
 
-    $currentDate = null;
-    $counter = 0;
+        $currentDate = null;
+        $counter = 0;
 
-    return $sortedBookings->map(function($booking) use (&$currentDate, &$counter) {
-        $bookingDate = Carbon::parse($booking->updated_at)->format('d-m-Y');
+        return $sortedBookings->map(function($booking) use (&$currentDate, &$counter) {
+            $bookingDate = Carbon::parse($booking->updated_at)->format('d-m-Y');
 
-        // Reset counter if it's a new day
-        if ($bookingDate !== $currentDate) {
-            $currentDate = $bookingDate;
-            $counter = 1;
-        } else {
-            $counter++;
-        }
-        
-        // Calculate tax and set admin fee
-        $tax = $booking->total_before_discount * 0.10;
-        $admin = 45000;
+            // Reset counter if it's a new day
+            if ($bookingDate !== $currentDate) {
+                $currentDate = $bookingDate;
+                $counter = 1;
+            } else {
+                $counter++;
+            }
+            
+            // Calculate tax and set admin fee
+            $tax = $booking->total_before_discount * 0.10;
+            $admin = 45000;
 
-        return [
-            'updated_at'  => $booking->updated_at ? Carbon::parse($booking->updated_at)->format('d-m-Y') : null,
-            'no'          => $counter, // Reset and increment counter per day
-            'code'        => $booking->code,
-            'name'        => $booking->first_name . ' ' . $booking->last_name,
-            'address'     => $booking->address,
-            'service'     => $booking->service->title,
-            'kamar'     => $booking->service->title,
-            'qty'     => '',
-            'total_before_discount' => $booking->total_before_discount,
-            'discount'    => $booking->coupon_amount,
-            'tax'    => $tax,
-            'admin'    => $admin,
-            'total'       => $booking->paid,
-            'payment'     => $booking->gateway,
-            'start_date'  => $booking->start_date ? Carbon::parse($booking->start_date)->format('d-m-Y') : null,
-            'end_date'    => $booking->end_date ? Carbon::parse($booking->end_date)->format('d-m-Y') : null,
-            'status'      => $booking->status,
-        ];
-    });
-}
+            return [
+                'updated_at'  => $booking->updated_at ? Carbon::parse($booking->updated_at)->format('d-m-Y') : null,
+                'no'          => $counter, // Reset and increment counter per day
+                'code'        => $booking->code,
+                'name'        => $booking->first_name . ' ' . $booking->last_name,
+                'address'     => $booking->address,
+                'service'     => $booking->service->title,
+                'kamar'     => $booking->service->title,
+                'qty'     => '',
+                'total_before_discount' => $booking->total_before_discount,
+                'discount'    => $booking->coupon_amount,
+                'tax'    => $tax,
+                'admin'    => $admin,
+                'total'       => $booking->paid,
+                'payment'     => $booking->gateway,
+                'start_date'  => $booking->start_date ? Carbon::parse($booking->start_date)->format('d-m-Y') : null,
+                'end_date'    => $booking->end_date ? Carbon::parse($booking->end_date)->format('d-m-Y') : null,
+                'status'      => $booking->status,
+            ];
+        });
+    }
 
 
     /**
@@ -133,12 +133,11 @@ class BookingsExport implements FromCollection, WithEvents
                 $event->sheet->setCellValue('I3', 'HARGA');
                 $event->sheet->setCellValue('J3', 'DISCOUNT');
                 $event->sheet->setCellValue('K3', 'TAX ROOM');
-                $event->sheet->setCellValue('L3', 'ADMIN');
-                $event->sheet->setCellValue('M3', 'TOTAL BAYAR');
-                $event->sheet->setCellValue('N3', 'METODE');
-                $event->sheet->setCellValue('O3', 'CHECK IN');
-                $event->sheet->setCellValue('P3', 'CHECK OUT');
-                $event->sheet->setCellValue('Q3', 'KETERANGAN');
+                $event->sheet->setCellValue('L3', 'TOTAL BAYAR');
+                $event->sheet->setCellValue('M3', 'METODE');
+                $event->sheet->setCellValue('N3', 'CHECK IN');
+                $event->sheet->setCellValue('O3', 'CHECK OUT');
+                $event->sheet->setCellValue('P3', 'KETERANGAN');
                 
                 // Menambahkan styling untuk heading di A3
                 $event->sheet->getStyle('A3:Q3')->applyFromArray([
@@ -162,12 +161,11 @@ class BookingsExport implements FromCollection, WithEvents
                     $event->sheet->setCellValue('I' . $rowIndex, $this->formatRupiah($row['total_before_discount']));
                     $event->sheet->setCellValue('J' . $rowIndex, $this->formatRupiah($row['discount']));
                     $event->sheet->setCellValue('K' . $rowIndex, $this->formatRupiah($row['tax']));
-                    $event->sheet->setCellValue('L' . $rowIndex, $this->formatRupiah($row['admin']));
-                    $event->sheet->setCellValue('M' . $rowIndex, $this->formatRupiah($row['total']));
-                    $event->sheet->setCellValue('N' . $rowIndex, $row['payment']);
-                    $event->sheet->setCellValue('O' . $rowIndex, $row['start_date']);
-                    $event->sheet->setCellValue('P' . $rowIndex, $row['end_date']);
-                    $event->sheet->setCellValue('Q' . $rowIndex, $row['status']);
+                    $event->sheet->setCellValue('L' . $rowIndex, $this->formatRupiah($row['total']));
+                    $event->sheet->setCellValue('M' . $rowIndex, $row['payment']);
+                    $event->sheet->setCellValue('N' . $rowIndex, $row['start_date']);
+                    $event->sheet->setCellValue('O' . $rowIndex, $row['end_date']);
+                    $event->sheet->setCellValue('P' . $rowIndex, $row['status']);
                     $rowIndex++;
                 }
             }
