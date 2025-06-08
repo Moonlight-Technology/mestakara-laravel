@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title',__('Page not found')); ?>
 <?php $__env->startSection('message',$exception->getMessage()??__("Sorry, we couldn't find the page you're looking for.")); ?>
 <?php $__env->startSection('code',404); ?>
