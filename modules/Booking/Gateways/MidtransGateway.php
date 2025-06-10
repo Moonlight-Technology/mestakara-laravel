@@ -87,7 +87,7 @@ class MidtransGateway extends BaseGateway
                     'id' => $item['name'],  // ID fee (misalnya tax, admin_fee)
                     'name' => $item['name'] ?? $item['name'],  // Nama fee (dalam bahasa lokal)
                     'quantity' => 1,  // Quantity = 1 untuk setiap fee
-                    'price' => $fee_price,  // Harga fee yang dihitung
+                    'price' => number_format($fee_price, 0, '', ''),  // Harga fee yang dihitung
                 ];
             }
         }
@@ -110,7 +110,7 @@ class MidtransGateway extends BaseGateway
         $params = [
             'transaction_details' => [
                 'order_id' => $booking->code,  // Kode booking sebagai order_id
-                'gross_amount' => $totalAmount,  // Total harga yang sudah dihitung
+                'gross_amount' => number_format($totalAmount, 0, '', ''),  // Total harga yang sudah dihitung
             ],
             'customer_details' => [
                 'first_name' => $booking->first_name,
@@ -123,6 +123,7 @@ class MidtransGateway extends BaseGateway
                 'finish' => url('/midtrans/notificationHandler'),  // URL untuk notifikasi
             ],
         ];
+        Log::info($params);
     
         // Get Midtrans Snap token
         try {
