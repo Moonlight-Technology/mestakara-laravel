@@ -47,6 +47,24 @@ class MidtransGateway extends BaseGateway
         $totalAmount = 0;
         $list_all_fee = [];
 
+        // Get extra prices 
+        $extra_price = $booking->getJsonMeta('extra_price');
+
+        // Mendapatkan extra prices dari database jika ada
+        if(!empty($extra_price)) {
+            foreach($extra_price as $idx => $type_extra_price) {
+                $itemDetails[] = [
+                    'id' => $idx+1,
+                    'name' => $type_extra_price['name'],
+                    'quantity' => 1,
+                    'price' => (float)$type_extra_price['total'] ?? 0,
+                ];
+
+                // Menghitung total harga dari semua tambahan harga
+                $totalAmount += (float)$type_extra_price['total'] ?? 0;
+            }
+        }
+
         // Mendapatkan buyer fees dari database jika ada
         if (!empty($booking->buyer_fees)) {
             $buyer_fees = json_decode($booking->buyer_fees, true);
@@ -123,8 +141,7 @@ class MidtransGateway extends BaseGateway
                 'finish' => url('/midtrans/notificationHandler'),  // URL untuk notifikasi
             ],
         ];
-        Log::info($params);
-    
+
         // Get Midtrans Snap token
         try {
             $snapToken = Snap::getSnapToken($params);
