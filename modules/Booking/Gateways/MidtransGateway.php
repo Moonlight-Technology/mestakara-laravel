@@ -47,24 +47,6 @@ class MidtransGateway extends BaseGateway
         $totalAmount = 0;
         $list_all_fee = [];
 
-        // Get extra prices 
-        $extra_price = $booking->getJsonMeta('extra_price');
-
-        // Mendapatkan extra prices dari database jika ada
-        if(!empty($extra_price)) {
-            foreach($extra_price as $idx => $type_extra_price) {
-                $itemDetails[] = [
-                    'id' => $idx+1,
-                    'name' => $type_extra_price['name'],
-                    'quantity' => 1,
-                    'price' => (float)$type_extra_price['total'] ?? 0,
-                ];
-
-                // Menghitung total harga dari semua tambahan harga
-                $totalAmount += (float)$type_extra_price['total'] ?? 0;
-            }
-        }
-
         // Mendapatkan buyer fees dari database jika ada
         if (!empty($booking->buyer_fees)) {
             $buyer_fees = json_decode($booking->buyer_fees, true);
@@ -107,6 +89,24 @@ class MidtransGateway extends BaseGateway
                     'quantity' => 1,  // Quantity = 1 untuk setiap fee
                     'price' => number_format($fee_price, 0, '', ''),  // Harga fee yang dihitung
                 ];
+            }
+        }
+
+        // Get extra prices 
+        $extra_price = $booking->getJsonMeta('extra_price');
+
+        // Mendapatkan extra prices dari database jika ada
+        if(!empty($extra_price)) {
+            foreach($extra_price as $idx => $type_extra_price) {
+                $itemDetails[] = [
+                    'id' => 'add_on_' . ($idx+1),
+                    'name' => $type_extra_price['name'],
+                    'quantity' => 1,
+                    'price' => (float)$type_extra_price['total'] ?? 0,
+                ];
+
+                // Menghitung total harga dari semua tambahan harga
+                $totalAmount += (float)$type_extra_price['total'] ?? 0;
             }
         }
 
